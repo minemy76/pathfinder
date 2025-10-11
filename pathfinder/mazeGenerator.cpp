@@ -22,41 +22,39 @@ void display(int height, int width, vector<vector<int>> grid) {
 class Maze {
 private:
     int width, height;
-    std::vector<std::vector<int>> grid;
-    std::vector<std::vector<bool>> visited;
+     vector<vector<int>> grid;
+     vector<vector<bool>> visited;
     //UP, RIGHT, DOWN, LEFT
     const int dx[4] = { 0, 1, 0, -1 };
     const int dy[4] = { -1, 0, 1, 0 };
 public:
     Maze(int w, int h) : width(w), height(h) {
-        // Инициализация сетки стенами (0)
-        grid.resize(height, std::vector<int>(width, 0));
-        visited.resize(height, std::vector<bool>(width, false));
+        //Initialising
+        grid.resize(height,vector<int>(width, 0));
+        visited.resize(height,vector<bool>(width, false));
     }
-
+    //Valid checker
     bool isValid(int x, int y) {return x >= 0 && x < width && y >= 0 && y < height;}
-
-    // Генерация лабиринта с помощью Recursive Backtracker
+    // Maze generation with Recursive Backtracker
     void generateMaze(int startX = 1, int startY = 1) {
-        startX = std::max(1, startX);
-        startY = std::max(1, startY);
+        startX = max(1, startX);
+        startY = max(1, startY);
         if (startX % 2 == 0) startX--;
         if (startY % 2 == 0) startY--;
-        std::stack<std::pair<int, int>> stack;
-        grid[startY][startX] = 1; // Начальная точка - путь
+        stack<pair<int, int>> stack;
+        grid[startY][startX] = 1; // Start point
         stack.push({ startX, startY });
-
-        // Инициализация генератора случайных чисел
-        std::random_device rd;
-        std::mt19937 gen(rd());
+        // Rand numbers init
+         random_device rd;
+         mt19937 gen(rd());
 
         while (!stack.empty()) {
             int x = stack.top().first;
             int y = stack.top().second;
 
             // Получаем все возможные направления
-            std::vector<int> directions = { 0, 1, 2, 3 };
-            std::shuffle(directions.begin(), directions.end(), gen);
+             vector<int> directions = { 0, 1, 2, 3 };
+             shuffle(directions.begin(), directions.end(), gen);
 
             bool found = false;
             for (int dir : directions) {
@@ -83,8 +81,8 @@ public:
 };
 
     int main() {
-        int width = 21;
-        int height = 21;
+        int width = 51;
+        int height = 51;
         Maze maze(width, height);
         maze.generateMaze();
         return 0;
