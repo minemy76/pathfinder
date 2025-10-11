@@ -3,21 +3,19 @@
 #include <queue>
 #include <stack>
 #include <random>
-#include <utility>
-#include <algorithm>
 #include <iomanip>
 
 using namespace std;
 
-void display(int height, int width, std::vector<std::vector<int>> grid) {
+void display(int height, int width, vector<vector<int>> grid) {
     for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {
             if (grid[y][x] == 0) 
-                std::cout << "88"; 
+                cout << "88"; 
             else 
                 cout << "  ";
         }
-        std::cout << "\n";
+        cout << "\n";
     }
 }
 
@@ -36,19 +34,14 @@ public:
         visited.resize(height, std::vector<bool>(width, false));
     }
 
-    // Проверка валидности координат
-    bool isValid(int x, int y) {
-        return x >= 0 && x < width && y >= 0 && y < height;
-    }
+    bool isValid(int x, int y) {return x >= 0 && x < width && y >= 0 && y < height;}
 
     // Генерация лабиринта с помощью Recursive Backtracker
     void generateMaze(int startX = 1, int startY = 1) {
-        // Убедимся, что начальная точка валидна и нечетна
         startX = std::max(1, startX);
         startY = std::max(1, startY);
         if (startX % 2 == 0) startX--;
         if (startY % 2 == 0) startY--;
-
         std::stack<std::pair<int, int>> stack;
         grid[startY][startX] = 1; // Начальная точка - путь
         stack.push({ startX, startY });
@@ -80,32 +73,19 @@ public:
                     break;
                 }
             }
-
-            if (!found) {
+            if (!found)
                 stack.pop();
-            }
         }
-
-        // Создаем вход и выход
-        grid[1][0] = 1; // Вход
-        grid[height - 2][width - 1] = 1; // Выход
+        grid[1][0] = 1;
+        grid[height - 2][width - 1] = 1;
         display(height, width, grid);
     }
 };
 
-
-
     int main() {
-        std::cout << "=== Maze Generator and Solver ===\n";
-        // Размеры лабиринта (должны быть нечетными для правильной работы)
         int width = 21;
         int height = 21;
-
         Maze maze(width, height);
-
-        std::cout << "\nGenerating maze...\n";
         maze.generateMaze();
-
-        std::cout << "\nGenerated maze:\n";
         return 0;
     }
