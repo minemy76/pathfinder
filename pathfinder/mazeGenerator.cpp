@@ -4,20 +4,9 @@
 #include <stack>
 #include <random>
 #include <iomanip>
+#include "header.h"
 
 using namespace std;
-
-void display(int height, int width, vector<vector<int>> grid) {
-    for (int y = 0; y < height; y++) {
-        for (int x = 0; x < width; x++) {
-            if (grid[y][x] == 0) 
-                cout << "88"; 
-            else 
-                cout << "  ";
-        }
-        cout << "\n";
-    }
-}
 
 class Maze {
 private:
@@ -76,7 +65,7 @@ public:
         }
         grid[1][0] = 1;
         grid[height - 2][width - 1] = 1;
-        display(height, width, grid);
+        displayTheMaze::display(height, width, grid);
     }
 };
 
