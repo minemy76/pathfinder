@@ -1,78 +1,109 @@
-﻿#include <iostream>
+﻿#include "maze.h"
+#include "bfs.h"
+#include <iostream>
 #include <vector>
-#include <queue>
 #include <stack>
 #include <random>
-#include <iomanip>
-#include "header.h"
+#include <algorithm>
+#include <utility>
 
-using namespace std;
+Maze::Maze(int w, int h) : width(w), height(h) {
+    // Initialize grid with walls (0)
+    grid.resize(height, std::vector<int>(width, 0));
+    visited.resize(height, std::vector<bool>(width, false));
+}
 
-class Maze {
-private:
-    int width, height;
-     vector<vector<int>> grid;
-     vector<vector<bool>> visited;
-    //UP, RIGHT, DOWN, LEFT
-    const int dx[4] = { 0, 1, 0, -1 };
-    const int dy[4] = { -1, 0, 1, 0 };
-public:
-    Maze(int w, int h) : width(w), height(h) {
-        //Initialising
-        grid.resize(height,vector<int>(width, 0));
-        visited.resize(height,vector<bool>(width, false));
-    }
-    //Valid checker
-    bool isValid(int x, int y) {return x >= 0 && x < width && y >= 0 && y < height;}
-    // Maze generation with Recursive Backtracker
-    void generateMaze(int startX = 1, int startY = 1) {
-        startX = max(1, startX);
-        startY = max(1, startY);
-        if (startX % 2 == 0) startX--;
-        if (startY % 2 == 0) startY--;
-        stack<pair<int, int>> stack;
-        grid[startY][startX] = 1; // Start point
-        stack.push({ startX, startY });
-        // Rand numbers init
-         random_device rd;
-         mt19937 gen(rd());
+bool Maze::isValid(int x, int y) {
+    return x >= 0 && x < width && y >= 0 && y < height;
+}
 
-        while (!stack.empty()) {
-            int x = stack.top().first;
-            int y = stack.top().second;
+void Maze::generateMaze(int startX, int startY) {
+    // Ensure starting point is valid and odd
+    startX = std::max(1, startX);
+    startY = std::max(1, startY);
+    if (startX % 2 == 0) startX--;
+    if (startY % 2 == 0) startY--;
 
-            // Получаем все возможные направления
-             vector<int> directions = { 0, 1, 2, 3 };
-             shuffle(directions.begin(), directions.end(), gen);
+    std::stack<std::pair<int, int>> stack;
+    grid[startY][startX] = 1; // Mark as path
+    stack.push({ startX, startY });
 
-            bool found = false;
-            for (int dir : directions) {
-                int nx = x + dx[dir] * 2;
-                int ny = y + dy[dir] * 2;
+    // Random numbers initialization
+    std::random_device rd;
+    std::mt19937 gen(rd());
 
-                if (isValid(nx, ny) && grid[ny][nx] == 0) {
-                    // Пробиваем стену между текущей и новой клеткой
-                    grid[y + dy[dir]][x + dx[dir]] = 1;
-                    grid[ny][nx] = 1;
+    while (!stack.empty()) {
+        int x = stack.top().first;
+        int y = stack.top().second;
 
-                    stack.push({ nx, ny });
-                    found = true;
-                    break;
-                }
+        // Get all possible directions and shuffle them
+        std::vector<int> directions = { 0, 1, 2, 3 };
+        std::shuffle(directions.begin(), directions.end(), gen);
+
+        bool found = false;
+        for (int dir : directions) {
+            int nx = x + dx[dir] * 2;
+            int ny = y + dy[dir] * 2;
+
+            if (isValid(nx, ny) && grid[ny][nx] == 0) {
+                // Carve passage between current and new cell
+                grid[y + dy[dir]][x + dx[dir]] = 1;
+                grid[ny][nx] = 1;
+
+                stack.push({ nx, ny });
+                found = true;
+                break;
             }
-            if (!found)
-                stack.pop();
         }
-        grid[1][0] = 1;
-        grid[height - 2][width - 1] = 1;
-        displayTheMaze::display(height, width, grid);
-    }
-};
 
-    int main() {
-        int width = 51;
-        int height = 51;
-        Maze maze(width, height);
-        maze.generateMaze();
-        return 0;
+        if (!found) {
+            stack.pop();
+        }
     }
+
+    // Create entrance and exit
+    grid[1][0] = 1;
+    grid[height - 2][width - 1] = 1;
+}
+
+void Maze::display() const {
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            if (grid[y][x] == 0) {
+                std::cout << "88";
+            }
+            else {
+                std::cout << "  ";
+            }
+        }
+        std::cout << "\n";
+    }
+}
+
+void Maze::resetVisited() {
+    for (auto& row : visited) {
+        std::fill(row.begin(), row.end(), false);
+    }
+}
+
+void demo::runDemo() {
+    // Create and generate maze
+    Maze maze(51, 51);
+    maze.generateMaze();
+    maze.display();
+    // Solve with BFS
+    std::cout << "\n";
+    auto start = maze.getStart();
+    auto end = maze.getEnd();
+
+    auto path = BFSSolver::solveBFS(maze, start.first, start.second, end.first, end.second);
+
+    // Display results
+    if (!path.empty()) {
+        BFSSolver::displaySolution(maze, path);
+        BFSSolver::analyzeSolution(path);
+    }
+    else {
+        std::cout << "No path found!\n";
+    }
+}

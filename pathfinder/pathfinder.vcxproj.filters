@@ -18,12 +18,18 @@
     <ClCompile Include="mazeGenerator.cpp">
       <Filter>Файлы ресурсов</Filter>
     </ClCompile>
-    <ClCompile Include="mazeDisplay.cpp">
+    <ClCompile Include="bfs.cpp">
+      <Filter>Файлы ресурсов</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
       <Filter>Файлы ресурсов</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="header.h">
+    <ClInclude Include="maze.h">
+      <Filter>Файлы ресурсов</Filter>
+    </ClInclude>
+    <ClInclude Include="bfs.h">
       <Filter>Файлы ресурсов</Filter>
     </ClInclude>
   </ItemGroup>
