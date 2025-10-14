@@ -15,15 +15,12 @@ private:
 
 public:
     Maze(int w, int h);
-
     // Core functionality
     void generateMaze(int startX = 1, int startY = 1);
-
     // Utility methods
     bool isValid(int x, int y);
     void display() const;
     void resetVisited();
-
     // Getters
     int getWidth() const { return width; }
     int getHeight() const { return height; }
