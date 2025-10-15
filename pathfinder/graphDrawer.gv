@@ -1,0 +1,6 @@
+digraph path{
+rankdir = LR;
+OPEN[shape="rectangle",style="filled",fillcolor="lightgrey", label="START"];
+CLOSED[shape = "rectangle", label = "END"];
+OPEN->CLOSED
+;}

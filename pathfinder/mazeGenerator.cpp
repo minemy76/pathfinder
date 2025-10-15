@@ -97,7 +97,7 @@ void demo::runDemo() {
     auto end = maze.getEnd();
 
     auto path = BFSSolver::solveBFS(maze, start.first, start.second, end.first, end.second);
-
+    graph::drawGraph();
     // Display results
     if (!path.empty()) {BFSSolver::displaySolution(maze, path);BFSSolver::analyzeSolution(path);}
     else std::cout << "No path found!\n";

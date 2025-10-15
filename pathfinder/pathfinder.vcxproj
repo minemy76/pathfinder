@@ -124,6 +124,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="bfs.cpp" />
+    <ClCompile Include="graphDrawer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mazeGenerator.cpp" />
   </ItemGroup>

@@ -34,4 +34,8 @@ namespace demo {
     void runDemo();
 }
 
+namespace graph {
+    void drawGraph();
+}
+
 #endif
