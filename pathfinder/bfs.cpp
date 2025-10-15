@@ -4,11 +4,9 @@
 #include <queue>
 #include <algorithm>
 #include <utility>
-#include <cmath>
 
 std::vector<std::pair<int, int>> BFSSolver::solveBFS(Maze& maze,
-    int startX, int startY,
-    int endX, int endY) {
+    int startX, int startY, int endX, int endY) {
     // Reset visited array
     maze.resetVisited();
     auto& visited = maze.getVisited();
@@ -73,8 +71,7 @@ void BFSSolver::displaySolution(const Maze& maze,
     int height = maze.getHeight();
 
     // Create display grid
-    std::vector<std::vector<char>> displayGrid(height,
-        std::vector<char>(width, ' '));
+    std::vector<std::vector<char>> displayGrid(height, std::vector<char>(width, ' '));
 
     // Fill display grid
     for (int y = 0; y < height; y++) {
@@ -103,9 +100,5 @@ void BFSSolver::displaySolution(const Maze& maze,
     }
 }
 
-void BFSSolver::analyzeSolution(const std::vector<std::pair<int, int>>& path) {
-    if (path.empty()) {
-        std::cout << "No solution found!\n";
-        return;
-    }
-}
+void BFSSolver::analyzeSolution(const std::vector<std::pair<int, int>>& path) 
+{if (path.empty()) {std::cout << "No solution found!\n";}}
