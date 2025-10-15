@@ -6,6 +6,7 @@
 #include <random>
 #include <algorithm>
 #include <utility>
+#include "graphDrawer.h"
 
 Maze::Maze(int w, int h) : width(w), height(h) {
     // Initialize grid with walls (0)
@@ -97,7 +98,7 @@ void demo::runDemo() {
     auto end = maze.getEnd();
 
     auto path = BFSSolver::solveBFS(maze, start.first, start.second, end.first, end.second);
-    graph::drawGraph();
+    GraphDrawer::drawGraphWithMaze(path, maze.getGrid());
     // Display results
     if (!path.empty()) {BFSSolver::displaySolution(maze, path);BFSSolver::analyzeSolution(path);}
     else std::cout << "No path found!\n";
