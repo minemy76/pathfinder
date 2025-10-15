@@ -1,6 +1,6 @@
 # Graph Visualization Tool
 
-A C++ application for visualizing paths and maze structures using Graphviz. This tool generates DOT language files that can be rendered into graphical representations of paths through mazes and other grid-based structures.
+A C++ application for visualizing paths and maze structures using Graphviz. This tool generates .gv files that can be rendered into graphical representations of paths through mazes and other grid-based structures.
 
 ## Features
 
