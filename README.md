@@ -14,7 +14,7 @@ A C++ application for visualizing paths and maze structures using Graphviz. This
 
 ### Required Software
 - **C++ Compiler** (C++11 or higher)
-- **Graphviz** (for rendering the generated DOT files)
+- **Graphviz** 
 
 ### Installing Graphviz
 
