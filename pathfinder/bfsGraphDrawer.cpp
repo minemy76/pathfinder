@@ -2,7 +2,7 @@
 #include <vector>
 #include <utility>
 #include <string>
-#include "graphDrawer.h"
+#include "bfsGraphDrawer.h"
 
 void GraphDrawer::drawGraph(const std::vector<std::pair<int, int>>& path) {
     std::ofstream graph("graphDrawer.gv");

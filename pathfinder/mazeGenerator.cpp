@@ -6,7 +6,7 @@
 #include <random>
 #include <algorithm>
 #include <utility>
-#include "graphDrawer.h"
+#include "bfsGraphDrawer.h"
 #include "dijkstraGraphDrawer.h"
 #include "dijkstra.h"
 
