@@ -7,6 +7,8 @@
 #include <algorithm>
 #include <utility>
 #include "graphDrawer.h"
+#include "dijkstraGraphDrawer.h"
+#include "dijkstra.h"
 
 Maze::Maze(int w, int h) : width(w), height(h) {
     // Initialize grid with walls (0)
@@ -87,7 +89,7 @@ void Maze::resetVisited() {
     }
 }
 
-void demo::runDemo() {
+void demo::runBFSDemo() {
     // Create and generate maze
     Maze maze(51, 51);
     maze.generateMaze();
@@ -102,4 +104,25 @@ void demo::runDemo() {
     // Display results
     if (!path.empty()) {BFSSolver::displaySolution(maze, path);BFSSolver::analyzeSolution(path);}
     else std::cout << "No path found!\n";
+}
+
+void demo::runDijkstraDemo() {
+    // Create and generate maze
+    Maze maze(51, 51);
+    maze.generateMaze();
+    maze.display();
+
+    // Solve with Dijkstra
+    std::cout << "\n";
+    auto start = maze.getStart();
+    auto end = maze.getEnd();
+    auto path = DijkstraSolver::solveDijkstra(maze, start.first, start.second, end.first, end.second);
+
+    // Generate Graphviz and display results
+    DijkstraGraphDrawer::drawGraphWithMaze(path, maze.getGrid());
+    if (!path.empty()) {
+        DijkstraSolver::displaySolution(maze, path);
+        DijkstraSolver::analyzeSolution(path);
+    }
+    else std::cout << "Dijkstra: No path found!\n";
 }

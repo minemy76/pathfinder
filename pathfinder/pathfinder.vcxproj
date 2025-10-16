@@ -124,13 +124,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="bfs.cpp" />
-    <ClCompile Include="graphDrawer.cpp" />
+    <ClCompile Include="dijkstra.cpp" />
+    <ClCompile Include="dijkstraDraphDrawer.cpp" />
+    <ClCompile Include="bfsGraphDrawer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mazeGenerator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bfs.h" />
-    <ClInclude Include="graphDrawer.h" />
+    <ClInclude Include="dijkstra.h" />
+    <ClInclude Include="dijkstraGraphDrawer.h" />
+    <ClInclude Include="bfsGraphDrawer.h" />
     <ClInclude Include="maze.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

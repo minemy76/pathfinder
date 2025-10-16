@@ -1,2 +1,2 @@
 #include "bfs.h" 
-void main() { demo::runDemo(); }
+void main() { demo::runBFSDemo(); demo::runDijkstraDemo(); }

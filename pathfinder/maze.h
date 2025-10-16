@@ -31,7 +31,8 @@ public:
 };
 
 namespace demo {
-    void runDemo();
+    void runBFSDemo();
+    void runDijkstraDemo();
 }
 
 #endif
