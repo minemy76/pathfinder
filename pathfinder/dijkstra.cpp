@@ -110,7 +110,7 @@ void DijkstraSolver::displaySolution(const Maze& maze,
     }
 
     // Display
-    std::cout << "Dijkstra Solution:\n";
+    std::cout << "\n";
     for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {
             std::cout << displayGrid[y][x] << ' ';
@@ -119,11 +119,5 @@ void DijkstraSolver::displaySolution(const Maze& maze,
     }
 }
 
-void DijkstraSolver::analyzeSolution(const std::vector<std::pair<int, int>>& path) {
-    if (path.empty()) {
-        std::cout << "Dijkstra: No solution found!\n";
-        return;
-    }
-
-    std::cout << "Dijkstra: Path found! Length: " << path.size() - 1 << " steps\n";
-}
+void DijkstraSolver::analyzeSolution(const std::vector<std::pair<int, int>>& path) 
+{if (path.empty()) std::cout << "Dijkstra: No solution found!\n";}
