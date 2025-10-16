@@ -8,7 +8,7 @@ A C++ application for visualizing paths and maze structures using Graphviz. This
 - **Maze Integration**: Visualize paths overlaid on maze structures with wall detection
 - **Color Coding**: Automatic color differentiation for start points, end points, path nodes, and obstacles
 - **BFS Path Display**: Specialized visualization for Breadth-First Search algorithms
-- **Graphviz Compatibility**: Outputs standard .gv files compatible with Graphviz tools
+- **Graphviz Compatibility**: Outputs standard DOT files compatible with Graphviz tools
 
 ## Prerequisites
 
