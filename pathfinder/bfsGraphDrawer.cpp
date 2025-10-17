@@ -49,9 +49,7 @@ void GraphDrawer::drawGraphWithMaze(const std::vector<std::pair<int, int>>& path
         graph << "{ rank = same; ";
         for (int x = 0; x < width; x++) {
             std::string color = "white";
-            if (mazeGrid[y][x] == 0) {
-                color = "black";
-            }
+            if (mazeGrid[y][x] == 0) color = "black";
             else {
                 // Check if cell is in path
                 for (size_t i = 0; i < path.size(); i++) {
