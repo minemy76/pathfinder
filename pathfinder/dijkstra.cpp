@@ -105,12 +105,11 @@ void DijkstraSolver::displaySolution(const Maze& maze,
 
     // Mark start and end
     if (!path.empty()) {
-        displayGrid[path.front().second][path.front().first] = 'S';
-        displayGrid[path.back().second][path.back().first] = 'E';
+        displayGrid[path.front().second][path.front().first] = '-';
+        displayGrid[path.back().second][path.back().first] = '+';
     }
 
     // Display
-    std::cout << "\n";
     for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {
             std::cout << displayGrid[y][x] << ' ';
