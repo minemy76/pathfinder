@@ -7,7 +7,7 @@
 void DijkstraGraphDrawer::drawGraphWithMaze(const std::vector<std::pair<int, int>>& path,
     const std::vector<std::vector<int>>& mazeGrid) {
 
-    std::ofstream graph("dijkstra_graph.gv");
+    std::ofstream graph("dijkstraGraph.gv");
     if (!graph.is_open()) return;
 
     graph << "digraph dijkstra_path {\n"
@@ -24,21 +24,13 @@ void DijkstraGraphDrawer::drawGraphWithMaze(const std::vector<std::pair<int, int
         for (int x = 0; x < width; x++) {
             std::string nodeName = "node_" + std::to_string(x) + "_" + std::to_string(y);
             std::string label = "(" + std::to_string(x) + "," + std::to_string(y) + ")";
-            std::string color;
-            bool isInPath = false;
 
-            // Check if cell is in path
-            for (size_t i = 0; i < path.size(); i++) {
-                if (path[i].first == x && path[i].second == y) {
-                    isInPath = true;
-                    break;
-                }
-            }
-
+            std::string color = "white";
             if (mazeGrid[y][x] == 0) {
                 color = "black";
             }
-            else if (isInPath) {
+            else {
+                // Check if cell is in path
                 for (size_t i = 0; i < path.size(); i++) {
                     if (path[i].first == x && path[i].second == y) {
                         if (i == 0) color = "green";
@@ -47,9 +39,6 @@ void DijkstraGraphDrawer::drawGraphWithMaze(const std::vector<std::pair<int, int
                         break;
                     }
                 }
-            }
-            else {
-                color = "white";
             }
 
             std::string fontcolor = (color == "black") ? "white" : "black";

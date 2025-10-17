@@ -5,7 +5,7 @@
 #include "bfsGraphDrawer.h"
 
 void GraphDrawer::drawGraph(const std::vector<std::pair<int, int>>& path) {
-    std::ofstream graph("graphDrawer.gv");
+    std::ofstream graph("bfsGraph.gv");
     if (!graph.is_open()) return;
 
     graph << "digraph path {\n"
@@ -14,17 +14,11 @@ void GraphDrawer::drawGraph(const std::vector<std::pair<int, int>>& path) {
 
     // Add all nodes from path
     for (size_t i = 0; i < path.size(); ++i) {
-        int x = path[i].first;
-        int y = path[i].second;
-        std::string nodeName = "node_" + std::to_string(i);
-        std::string label = "(" + std::to_string(x) + "," + std::to_string(y) + ")";
+        std::string color = (i == 0) ? "green" :
+            (i == path.size() - 1) ? "red" : "lightblue";
 
-        std::string color;
-        if (i == 0) color = "green";
-        else if (i == path.size() - 1) color = "red";
-        else color = "lightblue";
-
-        graph << nodeName << " [label=\"" << label << "\", fillcolor=\"" << color << "\"];\n";
+        graph << "node_" << i << " [label=\"(" << path[i].first << "," << path[i].second
+            << ")\", fillcolor=\"" << color << "\"];\n";
     }
 
     graph << "\n";
@@ -39,7 +33,7 @@ void GraphDrawer::drawGraph(const std::vector<std::pair<int, int>>& path) {
 
 void GraphDrawer::drawGraphWithMaze(const std::vector<std::pair<int, int>>& path,
     const std::vector<std::vector<int>>& mazeGrid) {
-    std::ofstream graph("graphDrawer.gv");
+    std::ofstream graph("bfsGraph.gv");
     if (!graph.is_open()) return;
 
     graph << "digraph path {\n"
@@ -54,21 +48,12 @@ void GraphDrawer::drawGraphWithMaze(const std::vector<std::pair<int, int>>& path
     for (int y = 0; y < height; y++) {
         graph << "{ rank = same; ";
         for (int x = 0; x < width; x++) {
-            std::string nodeName = "node_" + std::to_string(x) + "_" + std::to_string(y);
-            std::string label = "(" + std::to_string(x) + "," + std::to_string(y) + ")";
-            std::string color;
-            bool isInPath = false;
-
-            // Check if cell is in path
-            for (const auto& point : path) {
-                if (point.first == x && point.second == y) {
-                    isInPath = true;
-                    break;
-                }
+            std::string color = "white";
+            if (mazeGrid[y][x] == 0) {
+                color = "black";
             }
-
-            if (mazeGrid[y][x] == 0) color = "black";
-            else if (isInPath) {
+            else {
+                // Check if cell is in path
                 for (size_t i = 0; i < path.size(); i++) {
                     if (path[i].first == x && path[i].second == y) {
                         if (i == 0) color = "green";
@@ -78,15 +63,16 @@ void GraphDrawer::drawGraphWithMaze(const std::vector<std::pair<int, int>>& path
                     }
                 }
             }
-            else color = "white";
 
             std::string fontcolor = (color == "black") ? "white" : "black";
-            graph << nodeName << " [label=\"" << label << "\", fillcolor=\"" << color
-                << "\", fontcolor=\"" << fontcolor << "\"]; ";
+            graph << "node_" << x << "_" << y << " [label=\"(" << x << "," << y
+                << ")\", fillcolor=\"" << color << "\", fontcolor=\"" << fontcolor << "\"]; ";
         }
         graph << "}\n";
     }
+
     graph << "\n";
+
     // Add path connections
     if (!path.empty()) {
         graph << "edge [color=\"darkgreen\", penwidth=3.0, dir=\"forward\"];\n";
@@ -115,5 +101,6 @@ void GraphDrawer::drawGraphWithMaze(const std::vector<std::pair<int, int>>& path
             }
         }
     }
+
     graph << "}";
 }
