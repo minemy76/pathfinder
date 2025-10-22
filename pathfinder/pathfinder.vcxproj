@@ -125,7 +125,7 @@
   <ItemGroup>
     <ClCompile Include="bfs.cpp" />
     <ClCompile Include="dijkstra.cpp" />
-    <ClCompile Include="dijkstraDraphDrawer.cpp" />
+    <ClCompile Include="dijkstraGraphDrawer.cpp" />
     <ClCompile Include="bfsGraphDrawer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="mazeGenerator.cpp" />

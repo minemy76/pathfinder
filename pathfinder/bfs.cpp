@@ -4,35 +4,47 @@
 #include <queue>
 #include <algorithm>
 #include <utility>
+#include <iomanip>
+#include <stdexcept>
 
+// BFS maze solver - explores level by level like ripples in water
 std::vector<std::pair<int, int>> BFSSolver::solveBFS(Maze& maze,
     int startX, int startY, int endX, int endY) {
-    // Reset visited array
+
+    // Make sure we're not starting in a wall or outside the maze
+    if (!maze.isValid(startX, startY) || !maze.isValid(endX, endY)) {
+        throw std::invalid_argument("BFS: Start or end coordinates are outside maze boundaries");
+    }
+
+    // Clear previous search data for a fresh run
     maze.resetVisited();
     auto& visited = maze.getVisited();
     const auto& grid = maze.getGrid();
 
     int width = maze.getWidth();
     int height = maze.getHeight();
-    // Directions: UP, RIGHT, DOWN, LEFT
+
+    // Directions: up, right, down, left
     const int dx[4] = { 0, 1, 0, -1 };
     const int dy[4] = { -1, 0, 1, 0 };
 
-    std::queue<std::pair<int, int>> q;
+    std::queue<std::pair<int, int>> frontier;
+    // Keep track of where we came from to rebuild the path later
     std::vector<std::vector<std::pair<int, int>>> parent(
         height, std::vector<std::pair<int, int>>(width, { -1, -1 }));
 
-    q.push({ startX, startY });
+    frontier.push({ startX, startY });
     visited[startY][startX] = true;
 
-    while (!q.empty()) {
-        int x = q.front().first;
-        int y = q.front().second;
-        q.pop();
+    // Keep exploring until we run out of places to check
+    while (!frontier.empty()) {
+        int x = frontier.front().first;
+        int y = frontier.front().second;
+        frontier.pop();
 
-        // If reached the exit
+        // Sweet! Found the exit
         if (x == endX && y == endY) {
-            // Reconstruct path
+            // Walk backwards from exit to start using parent pointers
             std::vector<std::pair<int, int>> path;
             int curX = x, curY = y;
 
@@ -48,50 +60,55 @@ std::vector<std::pair<int, int>> BFSSolver::solveBFS(Maze& maze,
             return path;
         }
 
-        // Check all neighbors
+        // Check all four directions from current position
         for (int i = 0; i < 4; i++) {
             int nx = x + dx[i];
             int ny = y + dy[i];
 
+            // Only move if it's a valid empty cell we haven't seen before
             if (maze.isValid(nx, ny) && grid[ny][nx] == 1 && !visited[ny][nx]) {
                 visited[ny][nx] = true;
                 parent[ny][nx] = { x, y };
-                q.push({ nx, ny });
+                frontier.push({ nx, ny });
             }
         }
     }
 
-    return {}; // No path found
+    return {}; // Dead end - no path exists
 }
 
+// Show the maze solution as ASCII art
 void BFSSolver::displaySolution(const Maze& maze,
     const std::vector<std::pair<int, int>>& path) {
+
     const auto& grid = maze.getGrid();
     int width = maze.getWidth();
     int height = maze.getHeight();
 
-    // Create display grid
+    // Create a character grid for display
     std::vector<std::vector<char>> displayGrid(height, std::vector<char>(width, ' '));
 
-    // Fill display grid
+    // Convert 1s and 0s to visual characters
     for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {
             displayGrid[y][x] = (grid[y][x] == 0) ? '#' : ' ';
         }
     }
 
-    // Mark path
+    // Mark the solution path
     for (const auto& point : path) {
         displayGrid[point.second][point.first] = '.';
     }
 
-    // Mark start and end
+    // Make start and end stand out
     if (!path.empty()) {
-        displayGrid[path.front().second][path.front().first] = '-';
-        displayGrid[path.back().second][path.back().first] = '+';
+        displayGrid[path.front().second][path.front().first] = 'S';
+        displayGrid[path.back().second][path.back().first] = 'E';
     }
 
-    // Display
+    // Print the final maze
+    std::cout << "BFS Solution Path:\n";
+    std::cout << "Legend: # = Wall, . = Path, S = Start, E = End\n";
     for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {
             std::cout << displayGrid[y][x] << ' ';
@@ -100,5 +117,21 @@ void BFSSolver::displaySolution(const Maze& maze,
     }
 }
 
-void BFSSolver::analyzeSolution(const std::vector<std::pair<int, int>>& path) 
-{if (path.empty()) {std::cout << "No solution found!\n";}}
+// Give some stats about the solution we found
+void BFSSolver::analyzeSolution(const std::vector<std::pair<int, int>>& path) {
+    if (path.empty()) {
+        std::cout << "BFS Analysis: No viable path discovered\n";
+        return;
+    }
+
+    std::cout << "\nBFS Path Analysis Report:\n";
+    std::cout << "• Total path length: " << path.size() << " steps\n";
+    std::cout << "• Path coordinates: " << path.size() << " waypoints\n";
+
+    // How far apart start and end are (ignoring walls)
+    int manhattanDist = abs(path.back().first - path.front().first) +
+        abs(path.back().second - path.front().second);
+    std::cout << "• Optimal distance: " << manhattanDist << " (Manhattan)\n";
+    std::cout << "• Path efficiency ratio: " << std::fixed << std::setprecision(2)
+        << (static_cast<double>(manhattanDist) / path.size()) << "\n";
+}

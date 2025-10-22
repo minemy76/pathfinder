@@ -30,7 +30,7 @@
     <ClCompile Include="dijkstra.cpp">
       <Filter>Файлы ресурсов</Filter>
     </ClCompile>
-    <ClCompile Include="dijkstraDraphDrawer.cpp">
+    <ClCompile Include="dijkstraGraphDrawer.cpp">
       <Filter>Файлы ресурсов</Filter>
     </ClCompile>
   </ItemGroup>

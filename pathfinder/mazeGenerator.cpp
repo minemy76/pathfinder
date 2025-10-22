@@ -11,7 +11,7 @@
 #include "dijkstra.h"
 
 Maze::Maze(int w, int h) : width(w), height(h) {
-    // Initialize grid with walls (0)
+    // Start with everything as walls
     grid.resize(height, std::vector<int>(width, 0));
     visited.resize(height, std::vector<bool>(width, false));
 }
@@ -21,17 +21,17 @@ bool Maze::isValid(int x, int y) {
 }
 
 void Maze::generateMaze(int startX, int startY) {
-    // Ensure starting point is valid and odd
+    // Make sure start is inside maze and on odd coordinates
     startX = std::max(1, startX);
     startY = std::max(1, startY);
     if (startX % 2 == 0) startX--;
     if (startY % 2 == 0) startY--;
 
     std::stack<std::pair<int, int>> stack;
-    grid[startY][startX] = 1; // Mark as path
+    grid[startY][startX] = 1;
     stack.push({ startX, startY });
 
-    // Random numbers initialization
+    // Set up random number generator
     std::random_device rd;
     std::mt19937 gen(rd());
 
@@ -39,7 +39,7 @@ void Maze::generateMaze(int startX, int startY) {
         int x = stack.top().first;
         int y = stack.top().second;
 
-        // Get all possible directions and shuffle them
+        // Try directions in random order
         std::vector<int> directions = { 0, 1, 2, 3 };
         std::shuffle(directions.begin(), directions.end(), gen);
 
@@ -48,8 +48,9 @@ void Maze::generateMaze(int startX, int startY) {
             int nx = x + dx[dir] * 2;
             int ny = y + dy[dir] * 2;
 
+            // If the cell two steps away is a wall, we can carve a path
             if (isValid(nx, ny) && grid[ny][nx] == 0) {
-                // Carve passage between current and new cell
+                // Remove wall between current cell and new cell
                 grid[y + dy[dir]][x + dx[dir]] = 1;
                 grid[ny][nx] = 1;
 
@@ -59,6 +60,7 @@ void Maze::generateMaze(int startX, int startY) {
             }
         }
 
+        // Backtrack if no new paths found
         if (!found) {
             stack.pop();
         }
@@ -73,10 +75,10 @@ void Maze::display() const {
     for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {
             if (grid[y][x] == 0) {
-                std::cout << "88";
+                std::cout << "88";  // Wall
             }
             else {
-                std::cout << "  ";
+                std::cout << "  ";  // Path
             }
         }
         std::cout << "\n";
@@ -90,37 +92,34 @@ void Maze::resetVisited() {
 }
 
 void demo::runBFSDemo() {
-    // Create and generate maze
+    // Create and solve a maze with BFS
     std::cout << "\nBFS\n\n";
     Maze maze(21, 21);
     maze.generateMaze();
     maze.display();
-    // Solve with BFS
     std::cout << "\n";
     auto start = maze.getStart();
     auto end = maze.getEnd();
 
     auto path = BFSSolver::solveBFS(maze, start.first, start.second, end.first, end.second);
     GraphDrawer::drawGraphWithMaze(path, maze.getGrid());
-    // Display results
-    if (!path.empty()) {BFSSolver::displaySolution(maze, path);BFSSolver::analyzeSolution(path);}
+    // Show results
+    if (!path.empty()) { BFSSolver::displaySolution(maze, path); BFSSolver::analyzeSolution(path); }
     else std::cout << "No path found!\n";
 }
 
 void demo::runDijkstraDemo() {
-    // Create and generate maze
+    // Create and solve the same maze with Dijkstra
     std::cout << "\nDijkstra\n\n";
     Maze maze(21, 21);
     maze.generateMaze();
     maze.display();
-
-    // Solve with Dijkstra
     std::cout << "\n";
     auto start = maze.getStart();
     auto end = maze.getEnd();
     auto path = DijkstraSolver::solveDijkstra(maze, start.first, start.second, end.first, end.second);
 
-    // Generate Graphviz and display results
+    // Show results
     DijkstraGraphDrawer::drawGraphWithMaze(path, maze.getGrid());
     if (!path.empty()) {
         DijkstraSolver::displaySolution(maze, path);
