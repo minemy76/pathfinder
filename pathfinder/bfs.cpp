@@ -42,7 +42,6 @@ std::vector<std::pair<int, int>> BFSSolver::solveBFS(Maze& maze,
         int y = frontier.front().second;
         frontier.pop();
 
-        // Sweet! Found the exit
         if (x == endX && y == endY) {
             // Walk backwards from exit to start using parent pointers
             std::vector<std::pair<int, int>> path;
@@ -127,11 +126,4 @@ void BFSSolver::analyzeSolution(const std::vector<std::pair<int, int>>& path) {
     std::cout << "\nBFS Path Analysis Report:\n";
     std::cout << "• Total path length: " << path.size() << " steps\n";
     std::cout << "• Path coordinates: " << path.size() << " waypoints\n";
-
-    // How far apart start and end are (ignoring walls)
-    int manhattanDist = abs(path.back().first - path.front().first) +
-        abs(path.back().second - path.front().second);
-    std::cout << "• Optimal distance: " << manhattanDist << " (Manhattan)\n";
-    std::cout << "• Path efficiency ratio: " << std::fixed << std::setprecision(2)
-        << (static_cast<double>(manhattanDist) / path.size()) << "\n";
 }

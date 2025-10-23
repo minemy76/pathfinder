@@ -94,7 +94,7 @@ void Maze::resetVisited() {
 void demo::runBFSDemo() {
     // Create and solve a maze with BFS
     std::cout << "\nBFS\n\n";
-    Maze maze(21, 21);
+    Maze maze(31, 31);
     maze.generateMaze();
     maze.display();
     std::cout << "\n";
@@ -111,7 +111,7 @@ void demo::runBFSDemo() {
 void demo::runDijkstraDemo() {
     // Create and solve the same maze with Dijkstra
     std::cout << "\nDijkstra\n\n";
-    Maze maze(21, 21);
+    Maze maze(31, 31);
     maze.generateMaze();
     maze.display();
     std::cout << "\n";

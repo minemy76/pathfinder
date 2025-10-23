@@ -136,20 +136,7 @@ void DijkstraSolver::displaySolution(const Maze& maze,
 
 // Analyze how good our solution is
 void DijkstraSolver::analyzeSolution(const std::vector<std::pair<int, int>>& path) {
-    if (path.empty()) {
-        std::cout << "Dijkstra Analysis: No valid path discovered\n";
-        return;
-    }
-
+    if (path.empty()) {std::cout << "Dijkstra Analysis: No valid path discovered\n";}
     std::cout << "\nDijkstra Path Analysis Report:\n";
     std::cout << "• Total path cost: " << path.size() << " units\n";
-    std::cout << "• Start position: (" << path.front().first << ", " << path.front().second << ")\n";
-    std::cout << "• End position: (" << path.back().first << ", " << path.back().second << ")\n";
-
-    // Calculate straight-line distance for comparison
-    double straightLineDist = sqrt(pow(path.back().first - path.front().first, 2) +
-        pow(path.back().second - path.front().second, 2));
-    std::cout << "• Straight-line distance: " << std::fixed << std::setprecision(2)
-        << straightLineDist << " units\n";
-    std::cout << "• Path tortuosity: " << (path.size() / straightLineDist) << "\n";
 }
