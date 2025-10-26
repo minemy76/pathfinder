@@ -6,10 +6,13 @@
 #include <utility>
 #include <iomanip>
 #include <stdexcept>
+#include <chrono>
 
 // BFS maze solver - explores level by level like ripples in water
 std::vector<std::pair<int, int>> BFSSolver::solveBFS(Maze& maze,
     int startX, int startY, int endX, int endY) {
+
+    auto startTime = std::chrono::high_resolution_clock::now();
 
     // Make sure we're not starting in a wall or outside the maze
     if (!maze.isValid(startX, startY) || !maze.isValid(endX, endY)) {
@@ -42,7 +45,6 @@ std::vector<std::pair<int, int>> BFSSolver::solveBFS(Maze& maze,
         int y = frontier.front().second;
         frontier.pop();
 
-        // Sweet! Found the exit
         if (x == endX && y == endY) {
             // Walk backwards from exit to start using parent pointers
             std::vector<std::pair<int, int>> path;
@@ -57,6 +59,11 @@ std::vector<std::pair<int, int>> BFSSolver::solveBFS(Maze& maze,
             }
 
             std::reverse(path.begin(), path.end());
+
+            auto endTime = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime);
+            std::cout << "BFS execution time: " << duration.count() << " microseconds\n";
+
             return path;
         }
 
@@ -73,6 +80,10 @@ std::vector<std::pair<int, int>> BFSSolver::solveBFS(Maze& maze,
             }
         }
     }
+
+    auto endTime = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime);
+    std::cout << "BFS execution time: " << duration.count() << " microseconds\n";
 
     return {}; // Dead end - no path exists
 }
@@ -107,12 +118,9 @@ void BFSSolver::displaySolution(const Maze& maze,
     }
 
     // Print the final maze
-    std::cout << "BFS Solution Path:\n";
     std::cout << "Legend: # = Wall, . = Path, S = Start, E = End\n";
     for (int y = 0; y < height; y++) {
-        for (int x = 0; x < width; x++) {
-            std::cout << displayGrid[y][x] << ' ';
-        }
+        for (int x = 0; x < width; x++) {std::cout << displayGrid[y][x] << ' ';}
         std::cout << "\n";
     }
 }
@@ -123,15 +131,5 @@ void BFSSolver::analyzeSolution(const std::vector<std::pair<int, int>>& path) {
         std::cout << "BFS Analysis: No viable path discovered\n";
         return;
     }
-
-    std::cout << "\nBFS Path Analysis Report:\n";
     std::cout << "• Total path length: " << path.size() << " steps\n";
-    std::cout << "• Path coordinates: " << path.size() << " waypoints\n";
-
-    // How far apart start and end are (ignoring walls)
-    int manhattanDist = abs(path.back().first - path.front().first) +
-        abs(path.back().second - path.front().second);
-    std::cout << "• Optimal distance: " << manhattanDist << " (Manhattan)\n";
-    std::cout << "• Path efficiency ratio: " << std::fixed << std::setprecision(2)
-        << (static_cast<double>(manhattanDist) / path.size()) << "\n";
 }

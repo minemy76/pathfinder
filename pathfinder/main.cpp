@@ -3,7 +3,6 @@
 #include <iostream>
 #include <exception>
 
-// Run both algorithms and compare the results
 int main() {
     try {
         demo::runBFSDemo();

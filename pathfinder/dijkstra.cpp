@@ -9,10 +9,13 @@
 #include <stdexcept>
 #include <iomanip>
 #include <cmath>
+#include <chrono>
 
 // Dijkstra's algorithm - finds shortest path by always expanding the closest node
 std::vector<std::pair<int, int>> DijkstraSolver::solveDijkstra(Maze& maze,
     int startX, int startY, int endX, int endY) {
+
+    auto startTime = std::chrono::high_resolution_clock::now();
 
     // Basic sanity check first
     if (!maze.isValid(startX, startY) || !maze.isValid(endX, endY)) {
@@ -70,6 +73,11 @@ std::vector<std::pair<int, int>> DijkstraSolver::solveDijkstra(Maze& maze,
             }
 
             std::reverse(path.begin(), path.end());
+
+            auto endTime = std::chrono::high_resolution_clock::now();
+            auto duration = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime);
+            std::cout << "Dijkstra execution time: " << duration.count() << " microseconds\n";
+
             return path;
         }
 
@@ -90,6 +98,10 @@ std::vector<std::pair<int, int>> DijkstraSolver::solveDijkstra(Maze& maze,
             }
         }
     }
+
+    auto endTime = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(endTime - startTime);
+    std::cout << "Dijkstra execution time: " << duration.count() << " microseconds\n";
 
     return std::vector<std::pair<int, int>>(); // No path found
 }
@@ -124,12 +136,9 @@ void DijkstraSolver::displaySolution(const Maze& maze,
     }
 
     // Print the result
-    std::cout << "Dijkstra Solution Path:\n";
     std::cout << "Legend: # = Wall, . = Path, S = Start, E = End\n";
     for (int y = 0; y < height; y++) {
-        for (int x = 0; x < width; x++) {
-            std::cout << displayGrid[y][x] << ' ';
-        }
+        for (int x = 0; x < width; x++) {std::cout << displayGrid[y][x] << ' ';}
         std::cout << "\n";
     }
 }
@@ -140,16 +149,6 @@ void DijkstraSolver::analyzeSolution(const std::vector<std::pair<int, int>>& pat
         std::cout << "Dijkstra Analysis: No valid path discovered\n";
         return;
     }
+    std::cout << "* Total path length: " << path.size() << " units\n";
 
-    std::cout << "\nDijkstra Path Analysis Report:\n";
-    std::cout << "• Total path cost: " << path.size() << " units\n";
-    std::cout << "• Start position: (" << path.front().first << ", " << path.front().second << ")\n";
-    std::cout << "• End position: (" << path.back().first << ", " << path.back().second << ")\n";
-
-    // Calculate straight-line distance for comparison
-    double straightLineDist = sqrt(pow(path.back().first - path.front().first, 2) +
-        pow(path.back().second - path.front().second, 2));
-    std::cout << "• Straight-line distance: " << std::fixed << std::setprecision(2)
-        << straightLineDist << " units\n";
-    std::cout << "• Path tortuosity: " << (path.size() / straightLineDist) << "\n";
 }
