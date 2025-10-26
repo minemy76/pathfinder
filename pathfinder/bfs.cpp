@@ -131,5 +131,5 @@ void BFSSolver::analyzeSolution(const std::vector<std::pair<int, int>>& path) {
         std::cout << "BFS Analysis: No viable path discovered\n";
         return;
     }
-    std::cout << "• Total path length: " << path.size() << " steps\n";
+    std::cout << "* Total path length: " << path.size() << " steps\n";
 }

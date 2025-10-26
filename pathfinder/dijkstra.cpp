@@ -150,5 +150,4 @@ void DijkstraSolver::analyzeSolution(const std::vector<std::pair<int, int>>& pat
         return;
     }
     std::cout << "* Total path length: " << path.size() << " units\n";
-
 }
